@@ -445,7 +445,7 @@ export default function OrderShow() {
                 className="text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300 transition-colors"
                 onClick={() => {
                     if (confirm('Are you sure you want to delete this BEO?')) {
-                        router.delete(route('sales.orders.beos.destroy', { order: order.id, beo: beo.id }))
+                        router.delete(route('sales.orders.beos.destroy', [order.id, beo.id]))
                     }
                 }}
             >

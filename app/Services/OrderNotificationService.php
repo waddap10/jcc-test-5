@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\User;
 use App\Notifications\OrderApprovedByKanit;
 use App\Notifications\OrderNeedsReview;
+use App\Notifications\OrderSentToKanit;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
@@ -16,18 +17,26 @@ class OrderNotificationService
      */
     public function notifyOrderSentToKanit(Order $order, User $sentBy): void
     {
+        Log::info('Starting order sent to Kanit notification process', [
+            'order_id' => $order->id,
+            'sent_by' => $sentBy->id
+        ]);
+
         $kanitUsers = $this->getKanitUsers();
-        
+
         if ($kanitUsers->isEmpty()) {
             Log::warning('No Kanit users found to notify', ['order_id' => $order->id]);
             return;
         }
 
-        // You can create a separate notification for this if needed
-        Log::info('Order sent to Kanit - notification would be sent here', [
+        // Send notification to all Kanit users
+        Notification::send($kanitUsers, new OrderSentToKanit($order, $sentBy));
+
+        Log::info('Order sent to Kanit notification sent successfully', [
             'order_id' => $order->id,
             'sent_by' => $sentBy->id,
-            'kanit_users_count' => $kanitUsers->count()
+            'kanit_users_count' => $kanitUsers->count(),
+            'notified_user_ids' => $kanitUsers->pluck('id')->toArray()
         ]);
     }
 
@@ -40,14 +49,14 @@ class OrderNotificationService
             'order_id' => $order->id,
             'approved_by' => $approvedBy->id
         ]);
-        
+
         // Load relationships needed for notifications
         $order->load('beos.user', 'beos.department');
-        
+
         // Get sales users who should be notified
         $salesUsers = $this->getSalesUsers();
         Log::info('Found sales users', ['count' => $salesUsers->count()]);
-        
+
         // Get PIC users from the order's BEOs
         $picUsers = $this->getPicUsersFromOrder($order);
         Log::info('PIC vs Sales user analysis', [
@@ -62,10 +71,10 @@ class OrderNotificationService
     ] : 'User 4 not found',
     'overlap_users' => $salesUsers->whereIn('id', $picUsers->pluck('id'))->pluck('id')->toArray(),
 ]);
-        
+
         // Combine sales and PIC users, removing duplicates
         $allUsersToNotify = $salesUsers->merge($picUsers)->unique('id');
-        
+
         if ($allUsersToNotify->isEmpty()) {
             Log::warning('No users found to notify for order approval', ['order_id' => $order->id]);
             return;
@@ -102,7 +111,7 @@ class OrderNotificationService
     public function notifyOrderNeedsReview(Order $order, User $editedBy, array $changedFields = []): void
     {
         $kanitUsers = $this->getKanitUsers();
-        
+
         if ($kanitUsers->isEmpty()) {
             Log::warning('No Kanit users found to notify', ['order_id' => $order->id]);
             return;
@@ -149,7 +158,7 @@ class OrderNotificationService
             'kanit2@company.com',
             // Add your kanit user emails here
         ];
-        
+
         return User::whereIn('email', $kanitEmails)->get();
 
         // Method 5: Hardcoded user IDs (for testing)
@@ -187,7 +196,7 @@ class OrderNotificationService
             'sales2@company.com',
             // Add your sales user emails here
         ];
-        
+
         return User::whereIn('email', $salesEmails)->get();
 
         // Method 5: Hardcoded user IDs (for testing)
@@ -204,19 +213,19 @@ class OrderNotificationService
         if (!$order->relationLoaded('beos')) {
             $order->load('beos.user');
         }
-        
+
         // Get all unique users assigned as PICs in BEOs
         $picUsers = collect();
-        
+
         // Convert to collection to ensure consistent behavior
         $beos = collect($order->beos);
-        
+
         foreach ($beos as $beo) {
             if ($beo->user) {
                 $picUsers->push($beo->user);
             }
         }
-        
+
         // Remove duplicates and return as collection
         return $picUsers->unique('id');
     }
