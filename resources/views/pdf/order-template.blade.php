@@ -6,10 +6,10 @@
     <title>{{ $title ?? 'BEO Document' }}</title>
     <style>
         @page {
-    margin: 25mm 8mm 13mm 8mm;  /* Convert all to mm */
-    size: A4;
-}
-
+            margin: 25mm 8mm 13mm 8mm;
+            /* Convert all to mm */
+            size: A4;
+        }
 
         body {
             font-family: DejaVu Sans, Arial, sans-serif;
@@ -21,33 +21,37 @@
         }
 
         .page-header {
-    position: fixed;
-    top: -21mm;     /* Convert 80px ≈ 21mm */
-    left: 0;
-    right: 0;
-    height: 21mm;   /* Convert 80px ≈ 21mm */
-    border: none;
-    background: white;
-    z-index: 1000;
-}
-
+            position: fixed;
+            top: -21mm;
+            left: 0;
+            right: 0;
+            width: 100%;
+            height: 21mm;
+            border: 1px solid #000;
+            background: white;
+            z-index: 1000;
+        }
 
         .header-table {
             width: 100%;
-            height: 100%;
             margin: 0;
+            height: 100%;
             border-collapse: collapse;
-            border: 1px solid #000;
-            /* Add this line */
+            border: none;
         }
 
         .header-table td {
-            border: 1px solid #000;
+            border-right: 1px solid #000;
+            border-bottom: 1px solid #000;
             padding: 1mm 1.5mm;
             vertical-align: middle;
             font-size: 9px;
             color: #000;
             text-align: center;
+        }
+
+        .header-table td:last-child {
+            border-right: none;
         }
 
         .header-table .header-left {
@@ -79,17 +83,20 @@
 
         /* Fixed Footer with Page Numbers */
         .page-footer {
-    position: fixed;
-    bottom: -11mm;  /* Convert 40px ≈ 11mm */
-    left: 0;
-    right: 0;
-    height: 8mm;    /* Convert 30px ≈ 8mm */
-    text-align: center;
-    font-size: 9px;
-    border-top: 1px solid #000;
-    background: white;
-    padding: 2mm 0;  /* Convert 8px ≈ 2mm */
-}
+            position: fixed;
+            bottom: -11mm;
+            /* Convert 40px ≈ 11mm */
+            left: 0;
+            right: 0;
+            height: 8mm;
+            /* Convert 30px ≈ 8mm */
+            text-align: center;
+            font-size: 9px;
+            border-top: 1px solid #000;
+            background: white;
+            padding: 2mm 0;
+            /* Convert 8px ≈ 2mm */
+        }
 
         /* Title Section */
         .title-section {
@@ -123,7 +130,7 @@
             /* Add this line */
             padding: 0;
             width: 100%;
-            
+
         }
 
         .content-section {
@@ -134,7 +141,7 @@
             min-height: 40px;
         }
 
-        
+
 
         .content-section:last-child {
             border-bottom: none;
@@ -158,7 +165,7 @@
         }
 
         .info-table td {
-           padding: 1mm 1.5mm;
+            padding: 1mm 1.5mm;
             border: 1px solid #000;
             vertical-align: top;
             font-size: 9px;
@@ -717,7 +724,7 @@
                         </div>
                     @endforeach
                 </div>
-            @endif
+            @endiff 
 
             <!-- Additional Notes Section -->
             <div class="content-section">

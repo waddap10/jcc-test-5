@@ -212,24 +212,29 @@ class OrderPdfService
 
             $pdfData = array_merge($pdfData, $additionalData);
 
-            // UPDATED: DomPDF settings optimized for headers, footers, and page numbers
             $pdf = Pdf::loadView('pdf.order-template', $pdfData)
-                ->setPaper('A4', 'portrait')
-                ->setOptions([
-                    'defaultFont' => 'DejaVu Sans',
-                    'isRemoteEnabled' => false,
-                    'isHtml5ParserEnabled' => true,
-                    'isFontSubsettingEnabled' => true,
-                    'debugPng' => false,
-                    'debugKeepTemp' => false,
-                    'debugCss' => false,
-                    'enable_php' => true,           // IMPORTANT: Enable PHP for page numbers
-                    'dpi' => 96,
-                    'chroot' => storage_path(),
-                    // Additional options for better header/footer support
-                    'isPhpEnabled' => true,         // Alternative PHP enabler
-                    'tempDir' => storage_path('app/temp'), // Temp directory for processing
-                ]);
+    ->setPaper('A4', 'portrait')
+    ->setOptions([
+        'defaultFont' => 'DejaVu Sans',
+        'isRemoteEnabled' => false,
+        'isHtml5ParserEnabled' => true,
+        'isFontSubsettingEnabled' => true,
+        'debugPng' => false,
+        'debugKeepTemp' => false,
+        'debugCss' => false,
+        'enable_php' => true,
+        'dpi' => 96, // Increase DPI for better border rendering
+        'chroot' => storage_path(),
+        'isPhpEnabled' => true,
+        'tempDir' => storage_path('app/temp'),
+        // Add these for better border handling
+        'isJavascriptEnabled' => false,
+        'debugLayout' => false,
+        'debugLayoutLines' => false,
+        'debugLayoutBlocks' => false,
+        'debugLayoutInline' => false,
+        'debugLayoutPaddingBox' => false,
+    ]);
 
             Log::info('PDF object created with header/footer support enabled');
 
