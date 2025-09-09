@@ -724,7 +724,7 @@
                         </div>
                     @endforeach
                 </div>
-            @endiff 
+            @endif
 
             <!-- Additional Notes Section -->
             <div class="content-section">
