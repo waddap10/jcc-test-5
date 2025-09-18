@@ -212,7 +212,7 @@
 
         /* BEO Section - Two Column Layout */
         .beo-item-two-column {
-            border: 1px solid #000;
+            /* border: 1px solid #000; */
             margin-bottom: 4px;
             background-color: #fafafa;
             padding: 0;
@@ -649,7 +649,9 @@
             @if(isset($order->beos) && count($order->beos) > 0)
                 <div class="content-section">
                     <div class="section-title">BEO Departments</div>
+                </div>
                     @foreach($order->beos as $beo)
+                    <div class="content-section">
                         <div class="beo-item-two-column">
                             <div class="beo-left-column">
                                 <div class="beo-info">
@@ -722,8 +724,9 @@
                                 @endif
                             </div>
                         </div>
+                    </div>
                     @endforeach
-                </div>
+                
             @endif
 
             <!-- Additional Notes Section -->
@@ -756,10 +759,12 @@
                     });
                 @endphp
                 @if($orderImageAttachments->count() > 0)
-                    <div class="content-section">
+                    <div class="content-section page-break">
                         <div class="section-title">Order Images</div>
+                    </div>    
                         <div class="order-images-fullwidth">
                             @foreach($orderImageAttachments->take(8) as $attachment)
+                            <div class="content-section">
                                 <div class="order-image-item-fullwidth">
                                     <div class="order-image-container">
                                         <img src="{{ $attachment['base64_data'] }}" alt="{{ basename($attachment['file_name']) }}"
@@ -778,6 +783,7 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>    
                             @endforeach
                             @if($orderImageAttachments->count() > 8)
                                 <div class="more-images-notice">
@@ -785,7 +791,7 @@
                                 </div>
                             @endif
                         </div>
-                    </div>
+                    
                 @endif
             @endif
         </div>

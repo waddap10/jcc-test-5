@@ -230,19 +230,6 @@ export default function KanitDashboard({ orders, flash }: OrdersPageProps) {
                                                                     <Eye className="h-4 w-4" />
                                                                 </Button>
                                                             </Link>
-                                                            
-                                                            {/* Approve Button - only show if status_beo is 1 (Sudah Kirim Ke Kanit) */}
-                                                            {order.status_beo === 1 && (
-                                                                <Button
-                                                                    variant="default"
-                                                                    size="sm"
-                                                                    onClick={() => handleAccKanit(order)}
-                                                                    disabled={processing}
-                                                                    className="bg-green-600 hover:bg-green-700"
-                                                                >
-                                                                    <CheckCircle className="h-4 w-4" />
-                                                                </Button>
-                                                            )}
                                                         </div>
                                                     </TableCell>
                                                 </TableRow>
